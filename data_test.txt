@@ -1,0 +1,465 @@
+************
+*   User   *
+************
+
+// a- Create User : username, email and password . OK
+POST -  http://localhost:4000/api/v1/users/signup
+{
+    "username" : "User 1",
+    "email" : "user_1@gmail.com",
+    "password" : "user1_123",
+    "role" : "normal"
+}
+Return : 
+{
+    "status": "success",
+    "data": {
+        "newUser": {
+            "status": "active",
+            "id": 1,
+            "username": "User 1",
+            "email": "user_1@gmail.com",
+            "role": "normal",
+            "updatedAt": "2022-09-30T21:06:39.803Z",
+            "createdAt": "2022-09-30T21:06:39.803Z"
+        }
+    }
+}
+
+// b- Login : email and password. OK
+POST -  http://localhost:4000/api/v1/users/login
+{
+     "email" : "user_1@gmail.com",
+    "password" : "user1_123"
+}
+Return :
+{
+    "status": "success",
+    "data": {
+        "user": {
+            "id": 1,
+            "username": "User 1",
+            "email": "user_1@gmail.com",
+            "role": "normal",
+            "status": "active",
+            "createdAt": "2022-09-30T21:06:39.803Z",
+            "updatedAt": "2022-09-30T21:06:39.803Z"
+        },
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjY0NTcyMjM4LCJleHAiOjE2NjcxNjQyMzh9.QMlobqbKN3Z9R3kFKza6tXGXCXJceybDc_gHBCO6hpA"
+    }
+}
+
+// c- Get All Products of User : id  of token . OK
+Token
+GET - http://localhost:4000/api/v1/users/me 
+Return : OK
+
+
+
+// d- Update User : username and email . OK
+Token
+PATCH - http://localhost:4000/api/v1/users/id
+{
+    "username" : "User 100",
+    "email" : "user_1@gmail.com"
+}
+Return:
+{
+    "status": "success",
+    "data": {
+        "user": {
+            "id": 1,
+            "username": "User 1",
+            "email": "user_1@gmail.com",
+            "role": "normal",
+            "status": "active",
+            "createdAt": "2022-09-30T21:06:39.803Z",
+            "updatedAt": "2022-09-30T21:06:39.803Z"
+        }
+    }
+}
+
+// e- Disable user . OK
+Token
+DELETE - http://localhost:4000/api/v1/users/id
+Return :  ok
+
+// f: Get All Orders : status->purchased . 50% NOK
+Token
+GET - http://localhost:4000/api/v1/users/orders 
+Return :  NOK
+{
+    "status": "success",
+    "data": {
+        "order": {
+            "order": 2,
+            "cart": 1,
+            "productOrder": [
+                "Title product 3",
+                "Title product 2"
+            ]
+        },
+        "infoOrder": [
+            {
+                "id": 2,
+                "userId": 1,
+                "cartId": 1,
+                "totalPrice": 30,
+                "cart": {
+                    "id": 1,
+                    "status": "purchased",
+                    "productsInCart": {
+                        "productId": 3,
+                        "product": {
+                            "title": "Title product 3"
+                        }
+                    }
+                }
+            },
+            {
+                "id": 2,
+                "userId": 1,
+                "cartId": 1,
+                "totalPrice": 30,
+                "cart": {
+                    "id": 1,
+                    "status": "purchased",
+                    "productsInCart": {
+                        "productId": 2,
+                        "product": {
+                            "title": "Title product 2"
+                        }
+                    }
+                }
+            }
+        ]
+    }
+}
+
+// G: Get Order  by Id  : status->purchased .    OK
+Token
+GET - http://localhost:4000/api/v1/users/orders/id
+Return :  OK
+{
+    "status": "success",
+    "data": {
+        "orderCart": {
+            "order": 2,
+            "cart": 1,
+            "productOrder": [
+                {
+                    "idProduct": 3,
+                    "title": "Title product 3"
+                },
+                {
+                    "idProduct": 2,
+                    "title": "Title product 2"
+                }
+            ],
+            "imagesProduct": [
+                [
+                    {
+                        "productId": 3,
+                        "imgUrl": "product_img/3/css-1664661948820.png"
+                    },
+                    {
+                        "productId": 3,
+                        "imgUrl": "product_img/3/react-1664661948829.png"
+                    },
+                    {
+                        "productId": 3,
+                        "imgUrl": "product_img/3/js-1664661948828.png"
+                    },
+                    {
+                        "productId": 3,
+                        "imgUrl": "product_img/3/html-1664661948826.png"
+                    },
+                    {
+                        "productId": 3,
+                        "imgUrl": "product_img/3/php-1664661948829.png"
+                    }
+                ],
+                [
+                    {
+                        "productId": 2,
+                        "imgUrl": "product_img/2/react-1664660652968.png"
+                    },
+                    {
+                        "productId": 2,
+                        "imgUrl": "product_img/2/html-1664660652964.png"
+                    },
+                    {
+                        "productId": 2,
+                        "imgUrl": "product_img/2/php-1664660652967.png"
+                    },
+                    {
+                        "productId": 2,
+                        "imgUrl": "product_img/2/js-1664660652967.png"
+                    },
+                    {
+                        "productId": 2,
+                        "imgUrl": "product_img/2/css-1664660652957.png"
+                    }
+                ]
+            ]
+        }
+    }
+}
+
+
+
+
+
+*****************
+*   Products    *
+*****************
+
+// a- Get All Products : actives . OK
+GET - http://localhost:4000/api/v1/products
+Return : OK
+
+// b- Get Product for id. OK 
+GET -http://localhost:4000/api/v1/products/id
+Return : OK
+
+
+// c- Get All Categories : actives . OK
+GET - http://localhost:4000/api/v1/category
+Return : OK
+
+
+** NOTE :  First create a category **
+// d- Create Product  : title, description, price (INT),categoryId y quantity . OK
+// Image:  subir archivos al servidor . OK
+Token
+POST - http://localhost:4000/api/v1/products
+
+Authorization
+Bearer Token
+Token
+<token>
+Bodyform-data
+title
+Title product 1
+description
+Description product 1
+price
+2
+categoryId
+1
+quantity
+10
+postImg
+/C:/Users/WebFullNet/Documents/Academlo/img_products/css.png
+postImg
+/C:/Users/WebFullNet/Documents/Academlo/img_products/html.png
+postImg
+/C:/Users/WebFullNet/Documents/Academlo/img_products/js.png
+postImg
+/C:/Users/WebFullNet/Documents/Academlo/img_products/php.png
+postImg
+/C:/Users/WebFullNet/Documents/Academlo/img_products/react.png
+
+Return:
+{
+    "status": "success",
+    "data": {
+        "newProduct": {
+            "status": "active",
+            "id": 2,
+            "title": "Title product 1",
+            "description": "Description product 1",
+            "price": 2,
+            "categoryId": 1,
+            "quantity": 10,
+            "userId": 1,
+            "updatedAt": "2022-10-01T21:44:12.953Z",
+            "createdAt": "2022-10-01T21:44:12.953Z"
+        }
+    }
+}
+
+Return:
+{
+    "status": "error",
+    "message": "Category id : 3  no exists ",
+    "error": {
+        "statusCode": 404,
+        "status": "error"
+    },
+
+// e- Disabled Product.  User logged . OK
+http://localhost:4000/api/v1/products/2
+Token
+Return: OK
+
+Return:
+{
+    "status": "error",
+    "message": "Product id 111  not found",
+    "error": {
+        "statusCode": 404,
+        "status": "error"
+    }
+
+// f-  Create Category : category. User logged . OK
+Token
+POST - http://localhost:4000/api/v1/products/categories
+{
+    "name" : "Category 2"
+}
+Return: 
+{
+    "status": "success",
+    "data": {
+        "newCategory": {
+            "status": "active",
+            "id": 2,
+            "name": "Category 2",
+            "updatedAt": "2022-10-01T11:00:49.874Z",
+            "createdAt": "2022-10-01T11:00:49.874Z"
+        }
+    }
+}
+
+Return : Test if catgory exists
+{
+"status": "fail",
+    "message": "Category: \"Category 2\" exists",
+    "error": {
+        "statusCode": 200,
+        "status": "fail"
+    },
+
+// g- Update Category :  name and Address .  User logged . OK
+Token
+PATCH - http://localhost:4000/api/v1/products/categories/1
+{
+    "name" : "Category xxx"
+}
+Return: 
+{
+    "status": "success",
+    "data": {
+        "categoryUpdated": {
+            "id": 1,
+            "name": "Category xxx",
+            "status": "active",
+            "createdAt": "2022-10-01T10:42:01.405Z",
+            "updatedAt": "2022-10-01T11:39:43.508Z"
+        }
+    }
+}
+
+{
+    "status": "error",
+    "message": "Category id : 7  no exists ",
+    "error": {
+        "statusCode": 404,
+        "status": "error"
+    },
+
+Return :
+{
+    "status": "error",
+    "message": "Category id : 0  no exists ",
+    "error": {
+        "statusCode": 404,
+        "status": "error"
+    },
+
+// h- Update Product :  title, description,  price, quantity . OK
+Token
+PATCH -  http://localhost:4000/api/v1/products/122
+
+{
+    "title": "Title product 1",
+    "description": "Description product 1",
+    "price" : 2 ,
+    "categoryId" : 1,
+    "quantity" : 10
+}
+Return:
+{
+    "status": "success",
+    "data": {
+        "product": [
+            1
+        ]
+    }
+}
+
+Return:
+{
+    "status": "error",
+    "message": "Product id 122  not found",
+    "error": {
+        "statusCode": 404,
+        "status": "error"
+    },
+    
+
+    
+*****************
+*     CART      *
+*****************
+// a- Add Product Cart : productId , quantity. Control Stock . OK
+Token
+POST - http://localhost:4000/api/v1/cart/add-product
+{
+     "productId" : 2,
+    "quantity" : 1
+}
+Return:
+{
+    "status": "success",
+    "message": " Product add to cart "
+}
+Return: 
+{
+    "status": "error",
+    "message": " Product exists in cart "
+}
+
+
+
+// b- Update Cart : productId, newQty ( in cart ) . OK
+Token
+PATCH - http://localhost:4000/api/v1/cart/update-cart  
+{
+    "productId" : 3,
+    "newQty" : 1
+}
+Return:
+{
+    "status": "success",
+    "data": {
+        "cartUpdate": [
+            1
+        ]
+    }
+}
+
+// c- Remove Product  : productId ( in cart change to status deleted )
+Token
+DELETE - http://localhost:4000/api/v1/cart/id
+Return:
+{
+    "status": "success"
+}
+
+// d- Purchase Cart  :  only produtS active .  OK
+Token
+POST -  http://localhost:4000/api/v1/cart/purchase
+Return : status data base
+- Cart :  purchased
+- Products in cart : purchased
+- Products :  stock actualized
+- Order: created
+
+// e- View Cart active  :  products in cart . OK
+Token
+POST - http://localhost:4000/api/v1/cart/cart
+
+Return :  OK
+
