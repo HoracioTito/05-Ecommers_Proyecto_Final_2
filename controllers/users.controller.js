@@ -21,7 +21,6 @@ dotenv.config({ path: "./config.env" });
 
 // a ) OK
 const createUser = catchAsync(async (req, res, next) => {
-    console.log("create User");
     const { username, email, password, role } = req.body;
 
     if (role !== "admin" && role !== "normal") {
@@ -168,7 +167,7 @@ const getAllOrdersUser = catchAsync(async (req, res, next) => {
 const getOrderUser = catchAsync(async (req, res, next) => {
     const { sessionUser } = req;
     const { id } = req.params;
-    console.log(id);
+
     const orders = await Order.findAll({
         attributes: ["id", "userId", "cartId", "totalPrice"],
         where: { id: id, userId: sessionUser.id },
@@ -225,8 +224,6 @@ const getOrderUser = catchAsync(async (req, res, next) => {
 
     //* Images of product
     const promiseImages = productOrder.map(async (orderImgs) => {
-        console.log(orderImgs.idProduct);
-
         const images = await ProductImg.findAll({
             attributes: ["productId", "imgUrl"],
             where: {

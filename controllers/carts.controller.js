@@ -251,8 +251,6 @@ const purchaseCart = catchAsync(async (req, res, next) => {
     //* Promise
     await Promise.all(productPromises);
 
-    console.log(productPromises);
-
     //* Create order
     const purchase = await Order.create({
         userId: sessionUser.id,

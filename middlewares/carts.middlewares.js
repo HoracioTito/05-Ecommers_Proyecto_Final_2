@@ -31,7 +31,6 @@ const productIdExists = catchAsync(async (req, res, next) => {
 const productInCartExists = catchAsync(async (req, res, next) => {
     const { productId } = req.body;
 
-    console.log("productInCartExists");
     const productCart = await ProductsInCart.findOne({
         where: { productId },
     });
@@ -49,7 +48,6 @@ const productInCartExists = catchAsync(async (req, res, next) => {
 const productInCart = catchAsync(async (req, res, next) => {
     const { productId } = req.params;
 
-    console.log("productInCart");
     const productCart = await ProductsInCart.findOne({
         where: { productId },
     });

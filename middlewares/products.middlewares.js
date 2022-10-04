@@ -31,7 +31,7 @@ const categoryNameExists = catchAsync(async (req, res, next) => {
     });
 
     // If category exist, send error message
-    console.log(name);
+
     if (category) {
         return next(new AppError(`Category: "${name}" exists`, 200));
     }

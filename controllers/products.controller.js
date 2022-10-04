@@ -68,7 +68,6 @@ const getProduct = catchAsync(async (req, res, next) => {
 
 // c ) Get Categories with status active
 const getAllCategories = catchAsync(async (req, res, next) => {
-    console.log("getAllCategories");
     // Catgory with status active
     const categories = await Category.findAll({
         where: { status: "active" },
