@@ -1,10 +1,11 @@
 {
 	"name": "security-basics",
 	"version": "1.0.0",
-	"description": "A simple Express server",
+	"description": "Proyecto final Ecommers Node",
 	"main": "server.js",
 	"scripts": {
-		"start": "nodemon server.js"
+		"start": "node server.js",
+		"start:dev": "nodemon server.js"
 	},
 	"author": "Choque Horacio",
 	"license": "ISC",
