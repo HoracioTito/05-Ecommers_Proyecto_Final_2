@@ -2,6 +2,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 
+const { ref, uploadBytes, getDownloadURL } = require("firebase/storage");
+
 // Models
 const { User } = require("../models/user.model");
 const { Product } = require("../models/products.model");
@@ -13,6 +15,7 @@ const { Category } = require("../models/categories.model");
 // Utils
 const { catchAsync } = require("../utils/catchAsync.util");
 const { AppError } = require("../utils/appError.util");
+const { storage } = require("../utils/firebase.util");
 
 /***************************
  *  Upload Image FireBase  *
@@ -21,6 +24,7 @@ const {
     uploadProductsImgs,
     getProductsImgsUrls,
 } = require("../utils/firebase.util");
+const { ProductImg } = require("../models/productsImgs.model");
 
 dotenv.config({ path: "./config.env" });
 
@@ -32,16 +36,45 @@ const getAllProducts = catchAsync(async (req, res, next) => {
     // Validate if the user exist with given email
     const products = await Product.findAll({
         where: { status: "active" },
+        include: [
+            {
+                model: ProductImg,
+            },
+        ],
     });
+    console.log(products);
+
+    // return res.status(200).json({
+    //     status: "success",
+    //     data: { products },
+    // });
 
     /****************************
      * Firebase : get url image  *
      ***************************/
-    // const postsWithImgs = await getProductsImgsUrls(products);
+    // Loop through posts to get to the productsImgs
+    const postsWithImgsPromises = products.map(async (product) => {
+        //Get imgs URLs
+        const postImgsPromises = product.productsImgs.map(
+            async (productImg) => {
+                const imgRef = ref(storage, productImg.imgUrl);
+                const imgUrl = await getDownloadURL(imgRef);
+                productImg.imgUrl = imgUrl;
+                return productImg;
+            }
+        );
+        // Resolve imgs urls
+        const productsImgs = await Promise.all(postImgsPromises);
+        // Update old productsImgs array with new array
+        product.productsImgs = productsImgs;
+        return product;
+    });
+
+    const postsWithImgs = await Promise.all(postsWithImgsPromises);
 
     res.status(200).json({
         status: "success",
-        data: { products },
+        data: { products: postsWithImgs },
     });
 });
 

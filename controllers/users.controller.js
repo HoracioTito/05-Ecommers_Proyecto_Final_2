@@ -136,11 +136,6 @@ const getAllOrdersUser = catchAsync(async (req, res, next) => {
                             {
                                 model: Product,
                                 attributes: ["title"],
-                                // include: [
-                                //     {
-                                //         model: ProductImg,
-                                //     },
-                                // ],
                             },
                         ],
                     },
@@ -186,13 +181,6 @@ const getOrderUser = catchAsync(async (req, res, next) => {
                             {
                                 model: Product,
                                 attributes: ["id", "title"],
-
-                                // include: [
-                                //     {
-                                //         model: ProductImg,
-                                //         attributes: ["productId", "imgUrl"],
-                                //     },
-                                // ],
                             },
                         ],
                     },
@@ -200,11 +188,6 @@ const getOrderUser = catchAsync(async (req, res, next) => {
             },
         ],
     });
-
-    // return res.status(200).json({
-    //     status: "success",
-    //     data: orders.length,
-    // });
 
     if (orders.length === 0) {
         return res.status(404).json({
